@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Volopay Backend Assignment</title>
+</head>
+<body>
+  <h1>Volopay Backend Assignment</h1>
+  <form id="apiForm1">
+    <h2>Get Total Items Sold</h2>
+    <label for="startDate1">Start Date:</label>
+    <input type="date" id="startDate1" name="startDate1"><br>
+
+    <label for="endDate1">End Date:</label>
+    <input type="date" id="endDate1" name="endDate1"><br>
+
+    <label for="department1">Department:</label>
+    <input type="text" id="department1" name="department1"><br>
+
+    <button type="submit">Get Total Items Sold</button>
+  </form>
+
+  <div id="result1"></div>
+
+  <form id="apiForm2">
+    <h2>Get Nth Most Sold Item</h2>
+    <label for="itemBy">Item By:</label>
+    <select id="itemBy" name="itemBy">
+      <option value="quantity">Quantity</option>
+      <option value="price">Price</option>
+    </select><br>
+
+    <label for="startDate2">Start Date:</label>
+    <input type="date" id="startDate2" name="startDate2"><br>
+
+    <label for="endDate2">End Date:</label>
+    <input type="date" id="endDate2" name="endDate2"><br>
+
+    <label for="n">N:</label>
+    <input type="number" id="n" name="n" min="1" step="1"><br>
+
+    <button type="submit">Get Nth Most Sold Item</button>
+  </form>
+
+  <div id="result2"></div>
+
+  <h2>Percentage of Department-wise Sold Items</h2>
+  <form id="apiForm3">
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="startDate"><br>
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="endDate"><br>
+
+    <button type="submit">Get Percentage of Sold Items</button>
+  </form>
+
+  <div id="result3"></div>
+
+  <h2>Monthly Sales</h2>
+  <form id="apiForm4">
+    <label for="product">Product:</label>
+    <input type="text" id="product" name="product"><br>
+
+    <label for="year">Year:</label>
+    <input type="number" id="year" name="year" min="1900" step="1"><br>
+
+    <button type="submit">Get Monthly Sales</button>
+  </form>
+
+  <div id="result4"></div>
+
+  <script>
+
+    document.getElementById('apiForm1').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var startDate = document.getElementById('startDate1').value;
+      var endDate = document.getElementById('endDate1').value;
+      var department = document.getElementById('department1').value;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/total_items?start_date=' + startDate + '&end_date=' + endDate + '&department=' + department);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          document.getElementById('result1').textContent = 'Total Items Sold: ' + response.total_items_sold;
+        } else {
+          document.getElementById('result1').textContent = 'Error occurred. Please try again.';
+        }
+      };
+      xhr.send();
+    });
+
+    document.getElementById('apiForm2').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var itemBy = document.getElementById('itemBy').value;
+      var startDate = document.getElementById('startDate2').value;
+      var endDate = document.getElementById('endDate2').value;
+      var n = document.getElementById('n').value;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/nth_most_total_item?item_by=' + itemBy + '&start_date=' + startDate + '&end_date=' + endDate + '&n=' + n);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          document.getElementById('result2').textContent = 'Nth Most Sold Item: ' + response.nth_most_total_item;
+        } else {
+          document.getElementById('result2').textContent = 'Error occurred. Please try again.';
+        }
+      };
+      xhr.send();
+    });
+
+    document.getElementById('apiForm3').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var startDate = document.getElementById('startDate').value;
+      var endDate = document.getElementById('endDate').value;
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/percentage_of_department_wise_sold_items?start_date=' + startDate + '&end_date=' + endDate);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          var resultHTML = '<ul>';
+          for (var key in response) {
+            resultHTML += '<li>' + key + ': ' + response[key] + '%</li>';
+          }
+          resultHTML += '</ul>';
+          document.getElementById('result3').innerHTML = 'Percentage of Sold Items:<br>' + resultHTML;
+        } else {
+          document.getElementById('result3').textContent = 'Error occurred. Please try again.';
+        }
+      };
+      xhr.send();
+    });
+
+    document.getElementById('apiForm4').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var product = document.getElementById('product').value;
+      var year = document.getElementById('year').value;
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/monthly_sales?product=' + product + '&year=' + year);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          var resultHTML = 'Monthly Sales:<br><ul>';
+          for (var month in response) {
+            resultHTML += '<li>' + month + ': ' + response[month] + '</li>';
+          }
+          resultHTML += '</ul>';
+          document.getElementById('result4').innerHTML = resultHTML;
+        } else {
+          document.getElementById('result4').textContent = 'Error occurred. Please try again.';
+        }
+      };
+      xhr.send();
+    });
+
+  </script>
+</body>
+</html>
