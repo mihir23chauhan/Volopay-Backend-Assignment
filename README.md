@@ -1,9 +1,9 @@
 
 ---
 
-# Assignment for Volopay Banckend Internship
+# Assignment for Volopay Backend Internship
 
-APi developed using Flask and Pandas. 
+API was developed using Flask and Pandas. 
 
 
 ## Prerequisites
@@ -12,13 +12,19 @@ APi developed using Flask and Pandas.
 - Flask framework
 - Pandas library
 
+Commands to install Flask and Pandas modules. 
+```
+pip3 install flask
+pip3 install pandas 
+```
+
 ## Usage
 
 1. Start the Flask API server by running the following command in the project directory:
 
-   
+   ```
    flask run
-   
+   ```
 
    The server should now be running on `http://localhost:5000`.
 
@@ -41,6 +47,6 @@ APi developed using Flask and Pandas.
 - `templates/index.html`: The HTML file providing the user interface for interacting with the API endpoints.
 - `README.md`: The readme file explaining the project and its usage.
 
-## Screenshot of web api
+## Screenshot of web API
 
 ![](ss.png)
